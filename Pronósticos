@@ -1,0 +1,51 @@
+###---->MODELOS LINEALES PARA PRONÓSTICAR#<----###
+# Son la aplicación de pronósticos lineales como los métodos de la media, el ingenuo, el ingenuo estacional 
+# y el de deriva el pronóstico
+
+#---------------->   INGENUO   <---------------
+#     Esta basado en la última observación que arroja la serie de tiempo, es decir este pronóstico asume 
+#     que la observación más importante es la última.
+#  FUNCIÓN EN R --> navie(serie, h = num de pronósticos)
+#  Donde h = número de pronósticos que requiero
+
+#---------------->   MÉTODO DE LA MEDIA   <----------------
+#     Este método le da el mismo peso a todos los datos u observaciones, se asume que con este método todas 
+#     las observaciones tienen la misma importancia por lo que el pronóstico es un promedio de todas las observaciones
+#   FUNCIÓN EN R --> meanf(serie, h = número de pronósticos)
+
+#---------------->   INGENUO ESTACIONAL   <----------------
+#     Este método se utiliza en ST con alta estacionalidad, este proceso consiste en darle el mayor peso a la mayor
+#     ponderación al dato del mismo periodo en el año anterior, p.ejm. trimestre 2 del 2005 es igual al trimiste 2 del 2006
+#   FUNCIÓN EN R --> snavie(serie, h = número de pronósticos)
+
+#---------------->   INGENUO ESTACIONAL   <----------------
+#     Este método consiste en que el pronóstico puede incrementar o reducirse sobre el timepo, dependiendo del promedio
+#     de los cambios históricos de la serie de tiempo.
+#   FUNCIÓN EN R --> rwf(serie, h = número de pronóstico, drift = TRUE)
+
+#---------------->   EJERCICIO  <----------------
+des0 <- read.csv("C://Users//USUARIO//Desktop//tasas.csv")
+dests <- ts(des0, start = 2005, frequency = 4)
+install.packages("fpp")
+require (fpp)
+dests
+desocmod1<- meanf(dests[,1] , h=10)
+desocmod2<- navie(dests, h=10) #Toma el último dato de la serie y en base a este pronóstica 
+desocmod3<- snavie(dests[,1], h=10) #Pronóstica con base en los últimos datos que haya definido en mi serie 
+desocmod4<- rwf(dests[,1], h=10, drift= TRUE) #Como R reconoce que este modelo haga un pronósticos, 
+                                          # y lo hace con base a los cambios que haga la serie de tiempo
+x11()
+plot(desocmod1, main ="Tasa de desocupación trimestral", col = "green")
+lines(desocmod1$mean, col = "green")
+lines(desocmod2$mean, col = "black")
+lines(desocmod3$mean, col = "pink")
+lines(desocmod4$mean, col = "red")
+legend("topleft",lty = 1, col = c("green","black","pink","red"), legend = c("media","ingenuo", "ingenuo estacional", "deriva"))
+
+#------------------> Ajustados <----------------
+plot(desocmod1, main = "Tasa de desocupación trimestral")
+lines(desocmod2$fitted, col="black")
+lines(desocmod3$fitted, col="pink")
+lines(desocmod4$fitted, col="green")
+legend("topleft", lty = 1, col = c(5,6,7,8), legend = c("media","ingenuo", "ingenuo estacional", "deriva"))
+names(desocmod1)
