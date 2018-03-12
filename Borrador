@@ -1,0 +1,11 @@
+accidente<- read.csv("C://Users//USUARIO//Desktop//accidentes.csv")
+#View(accidente)
+#acci1<-rbind(accidente[6:17,])
+#View(acci1)
+#a<-cbind(acci1)[,2]
+acci1<-accidente[-1,]
+acci1<-accidente[,-1]
+acci1<-accidente[,-5]
+trs<-t(t(acci1))#Para convertir en caracter sin modificar los años de nuestra data
+ctrs<-c(trs)#Genera un array 
+accts<-ts(ctrs, frequency = 12, start = 1996)
