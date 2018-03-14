@@ -1,0 +1,26 @@
+acci<- read.csv("C://Users//USUARIO//Desktop//accidentes.csv")
+#system. time(acci<-[-1,1])
+#acci
+acci<-acci[6:17,-1]
+acci
+#Eliminando columnas, no es necesario generar una matriz, solo se necesita utilizar el
+trs<- t(t(acci)) #Para convertir en caracter sin modificar los datos
+ctrs<-c(trs)#Genera un array 
+accts<- ts(ctrs, frequency=12, start = 1997)
+accts
+install.packages("fpp")
+require(fpp)
+
+######SUAVISADO EXPONENCIAL SIMPLE (sES) ####
+x11()
+plot(accts)
+mod1<-ses(accts, alpha=.1, h=12)
+mod2<-ses(accts, alpha=.5, h=12)
+mod3<-ses(accts, alpha=.9, h=12)
+names(mod1)
+plot(mod1,ylab="accidentes",xlab="año",main="número de accidentes",type="o")
+lines(mod1$mean,col="red", type="o")
+lines(mod2$mean,col="green", type="o")
+lines(mod3$mean,col="orange", type="o")
+legend("topleft", lty=1, col=c("black","red","green","orange"), 
+c("datos originales", expression (alpha==.1),expression(alpha==.5),expression(alpha==.9)),pch = 3)
