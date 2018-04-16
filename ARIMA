@@ -1,0 +1,7 @@
+deso <- read.csv ("C://Users//USUARIO//Desktop//ENOE.csv")
+desot <- ts (deso, start = 2005, frequency = 4)
+require(fpp)
+mod1 <- auto.arima(desot,seasonal = F)
+mod1
+x11()
+plot (forecast(mod1, h=10))
