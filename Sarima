@@ -1,0 +1,29 @@
+install.packages("fpp")
+require("fpp")
+help("euretail")
+x11()
+plot(euretail)
+tsdisplay(diff(euretail,4))
+tsdisplay(diff(diff(euretail,4)))
+#con esto se puede observar a grandes rasgos una serie con rasgos mas similares a una serie estacionaria por lo que ahora
+#hay que encontrar un modelo Arima más a´propiado basados en el ACF y PACF
+#El primer rezago o valor que se observa en el ACF y que sobrepasa ligeramente la frontera podría sugerir un componente MA(1),
+#por lo que podriamos iniciar con una ARIMA (0,1,1)(0,1,1)4
+mod<- Arima (euretail, order = c(0,1,1), seasonal = c(0,1,1))
+#Para observar residuales 
+tsdisplay(residuals(mod))
+## Una vez que se tiene una primera propuesta de modelo Arima, se tien que observar los residuales de esre modelo y observar 
+# los valores de ACF y PACF de los residuales muestran valores significativos en el rezago 2 y casi significaivos en 
+# el rezago 32, lo que indica que pueden ser agregados algunos componentes no estacionales en el modelo....
+# Por ejemplo Arima(0,1,2)(0,1,1)4 y (0,1,3)(0,1,1)4 con estos modelos propuestos se applicar R y observar el AICC mejor para 
+# que modelo predecir.
+##Una vez que se elige el modelo con base en el AICC como último paso hay que obtener los residuales y garantizar que sean 
+# ruidos blanco con la prueba BOX.test(Res, lag=16, fitdf=4, type="ljung")
+mod2<- Arima (euretail, order = c(0,1,2), seasonal = c(0,1,1))
+mod3<- Arima (euretail, order = c(0,1,3), seasonal = c(0,1,1))
+mod4<- Arima (euretail, order = c(0,1,4), seasonal = c(0,1,1))
+mod
+mod2
+mod3
+mod4
+Box.test(residuals(mod3), lag=16,fitdf = 4, type = "Ljung-Box")
